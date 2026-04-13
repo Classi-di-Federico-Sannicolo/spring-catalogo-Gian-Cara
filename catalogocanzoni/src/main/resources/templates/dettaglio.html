@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dettaglio Canzone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dettagli Canzone</h2>
+        <a th:href="@{/}" class="btn btn-outline-primary">🏠 Home</a>
+    </div>
+
+    <div th:if="${messaggio}" class="alert alert-success shadow-sm" th:text="${messaggio}"></div>
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h3 class="mb-0" th:text="${canzone.titolo}"></h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Autore:</strong> <span th:text="${canzone.autore}"></span></p>
+            <p><strong>Anno:</strong> <span th:text="${canzone.anno != null ? canzone.anno : 'Non specificato'}"></span></p>
+            <p><strong>Categorie assegnate:</strong></p>
+            <div>
+                <span th:each="cat : ${canzone.categorie}" class="badge bg-info text-dark me-2 p-2" th:text="${cat}"></span>
+            </div>
+            <hr>
+            <small class="text-muted">ID Sistema (Univoco): <span th:text="${canzone.codice}"></span></small>
+        </div>
+        <div class="card-footer text-center">
+            <a th:href="@{/}" class="btn btn-secondary">Torna alla Lista</a>
+        </div>
+    </div>
+</body>
+</html>
