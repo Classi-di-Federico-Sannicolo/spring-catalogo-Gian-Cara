@@ -4,7 +4,6 @@
     <title>Catalogo Canzoni</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Separazione netta e colori alternati per le canzoni */
         .table-custom tbody tr:nth-of-type(odd) { background-color: #f8faff; }
         .table-custom tbody tr:nth-of-type(even) { background-color: #ffffff; }
         .table-custom tr { border-bottom: 2px solid #dee2e6; vertical-align: middle; }
@@ -39,6 +38,7 @@
                     <span th:each="cat : ${c.categorie}" class="badge badge-cat" th:text="${cat}"></span>
                 </td>
                 <td>
+                    <a th:href="@{/edit/{id}(id=${c.codice})}" class="btn btn-sm btn-warning me-2">Modifica</a>
                     <a th:href="@{/delete/{id}(id=${c.codice})}" class="btn btn-sm btn-danger" onclick="return confirm('Eliminare questa canzone?')">Elimina</a>
                 </td>
             </tr>
@@ -47,7 +47,7 @@
 
     <div class="mt-4">
         <a th:href="@{/new}" class="btn btn-success">➕ Aggiungi Nuova Canzone</a>
-        <a th:href="@{/clear}" class="btn btn-danger float-end" onclick="return confirm('Sei sicuro di voler svuotare tutto il catalogo?')">🗑️ Svuota Tutto</a>
+        <a th:href="@{/clear}" class="btn btn-danger float-end" onclick="return confirm('Svuotare tutto il catalogo?')">🗑️ Svuota Tutto</a>
     </div>
 </body>
 </html>
