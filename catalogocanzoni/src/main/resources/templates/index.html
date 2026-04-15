@@ -1,53 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Catalogo Canzoni</title>
+    <title>Music Catalog Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .table-custom tbody tr:nth-of-type(odd) { background-color: #f8faff; }
-        .table-custom tbody tr:nth-of-type(even) { background-color: #ffffff; }
-        .table-custom tr { border-bottom: 2px solid #dee2e6; vertical-align: middle; }
-        .badge-cat { background-color: #6c757d; color: white; margin-right: 4px; }
+        body { background-color: #f0f2f5; color: #1c1e21; }
+        .glass-card { background: white; border-radius: 12px; padding: 25px; border: none; }
+        .table-custom tbody tr:nth-of-type(odd) { background-color: #fafafa; }
+        .table-custom tr { vertical-align: middle; border-bottom: 1px solid #eee; }
+        .badge-cat { background-color: #e4e6eb; color: #4b4b4b; margin-right: 4px; border-radius: 6px; }
     </style>
 </head>
 <body class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>🎵 Catalogo Canzoni</h1>
-        <a th:href="@{/}" class="btn btn-outline-primary">🏠 Home</a>
+    <div class="glass-card shadow-sm mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">🎵 Catalogo Canzoni</h1>
+            <a th:href="@{/}" class="btn btn-outline-primary btn-sm">🏠 Home / Reset</a>
+        </div>
+
+        <form th:action="@{/}" method="get" class="row g-3 bg-light p-3 rounded-3 border">
+            <div class="col-md-4">
+                <label class="form-label fw-bold small">Titolo o Autore</label>
+                <input type="text" name="search" class="form-control" placeholder="Cerca titolo o artista..." th:value="${param.search}">
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-bold small">Anno</label>
+                <input type="number" name="anno" class="form-control" placeholder="Es: 1995" th:value="${param.anno}">
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-bold small">Genere</label>
+                <select name="genere" class="form-select">
+                    <option value="">Tutti i generi</option>
+                    <option th:each="g : ${generi}" th:value="${g}" th:text="${g}" 
+                            th:selected="${param.genere != null && param.genere[0] == g}"></option>
+                </select>
+            </div>
+            
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Filtra</button>
+            </div>
+        </form>
     </div>
 
-    <form th:action="@{/}" method="get" class="mb-4 d-flex gap-2">
-        <input type="text" name="search" class="form-control" placeholder="Cerca titolo canzone...">
-        <button type="submit" class="btn btn-primary">Cerca</button>
-    </form>
+    <div class="glass-card shadow-sm">
+        <table class="table table-custom">
+            <thead class="table-light">
+                <tr>
+                    <th>Titolo</th>
+                    <th>Autore</th>
+                    <th>Anno</th> <th>Generi</th>
+                    <th class="text-end">Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${canzoni}">
+                    <td class="fw-bold">
+                        <a th:href="@{/item/{id}(id=${c.codice})}" th:text="${c.titolo}" class="text-decoration-none text-dark"></a>
+                    </td>
+                    <td th:text="${c.autore}"></td>
+                    <td th:text="${c.anno != null ? c.anno : '-'}"></td> <td>
+                        <span th:each="cat : ${c.categorie}" class="badge badge-cat p-2" th:text="${cat}"></span>
+                    </td>
+                    <td class="text-end">
+                        <a th:href="@{/edit/{id}(id=${c.codice})}" class="btn btn-sm btn-warning">Modifica</a>
+                        <a th:href="@{/delete/{id}(id=${c.codice})}" class="btn btn-sm btn-danger" onclick="return confirm('Eliminare?')">Elimina</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table table-custom">
-        <thead class="table-dark">
-            <tr>
-                <th>Titolo</th>
-                <th>Autore</th>
-                <th>Categorie</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="c : ${canzoni}">
-                <td><a th:href="@{/item/{id}(id=${c.codice})}" th:text="${c.titolo}" class="fw-bold text-decoration-none"></a></td>
-                <td th:text="${c.autore}"></td>
-                <td>
-                    <span th:each="cat : ${c.categorie}" class="badge badge-cat" th:text="${cat}"></span>
-                </td>
-                <td>
-                    <a th:href="@{/edit/{id}(id=${c.codice})}" class="btn btn-sm btn-warning me-2">Modifica</a>
-                    <a th:href="@{/delete/{id}(id=${c.codice})}" class="btn btn-sm btn-danger" onclick="return confirm('Eliminare questa canzone?')">Elimina</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="mt-4">
-        <a th:href="@{/new}" class="btn btn-success">➕ Aggiungi Nuova Canzone</a>
-        <a th:href="@{/clear}" class="btn btn-danger float-end" onclick="return confirm('Svuotare tutto il catalogo?')">🗑️ Svuota Tutto</a>
+        <div class="mt-4 d-flex justify-content-between">
+            <a th:href="@{/new}" class="btn btn-success fw-bold">➕ Aggiungi Nuova Canzone</a>
+            <a th:href="@{/clear}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Svuotare tutto?')">Svuota Catalogo</a>
+        </div>
     </div>
 </body>
 </html>
