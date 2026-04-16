@@ -4,51 +4,98 @@
     <title>Gestione Canzone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f4f7f6; color: #333; }
-        .card { border-radius: 15px; border: none; }
-        .btn-info { background-color: #00d2ff; border: none; color: white; }
-        .btn-info:hover { background-color: #0099cc; color: white; }
+        body {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('/Immagini/Spring_2.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .form-control { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+        }
+
+        .form-control:focus { 
+            background: rgba(255, 255, 255, 0.2); 
+            color: white; 
+            border-color: #00d2ff; 
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .form-check-input:checked { 
+            background-color: #00d2ff; 
+            border-color: #00d2ff; 
+        }
+
+        .text-info-custom {
+            color: #00d2ff;
+            font-weight: bold;
+        }
+        
+        /* Aggiunta piccola per i messaggi di errore */
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 th:text="${canzone.codice == null || canzone.codice == ''} ? '🆕 Nuova Canzone' : '📝 Modifica'"></h2>
-                <a th:href="@{/}" class="btn btn-outline-secondary">🏠 Home</a>
+                <h2 th:text="${canzone.codice == null || canzone.codice == ''} ? '🆕 Registra Nuova Traccia' : '📝 Modifica Traccia'"></h2>
+                <a th:href="@{/}" class="btn btn-outline-info">🏠 Torna al Catalogo</a>
             </div>
 
-            <form th:action="@{/save}" th:object="${canzone}" method="post" class="card p-4 shadow-sm">
+            <form th:action="@{/save}" th:object="${canzone}" method="post" class="glass-card p-4 shadow-lg">
                 <input type="hidden" th:field="*{codice}">
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Titolo</label>
-                    <input type="text" th:field="*{titolo}" class="form-control" required>
+                    <label class="form-label text-info-custom">Titolo della Canzone *</label>
+                    <input type="text" th:field="*{titolo}" class="form-control" placeholder="Inserisci il titolo...">
+                    <div class="error-msg" th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}"></div>
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Artista</label>
-                    <input type="text" th:field="*{autore}" class="form-control" required>
+                    <label class="form-label text-info-custom">Artista / Band *</label>
+                    <input type="text" th:field="*{autore}" class="form-control" placeholder="Inserisci l'autore...">
+                    <div class="error-msg" th:if="${#fields.hasErrors('autore')}" th:errors="*{autore}"></div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Anno</label>
-                    <input type="number" th:field="*{anno}" class="form-control" min="0">
+                    <label class="form-label text-info-custom">Anno di Pubblicazione</label>
+                    <input type="number" th:field="*{anno}" class="form-control" placeholder="Esempio: 2024"
+                           oninput="if(this.value.length > 4) this.value = this.value.slice(0,4);">
+                    <div class="error-msg" th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}"></div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Generi</label>
+                    <label class="form-label text-info-custom">Generi Musicali</label>
                     <div class="row g-2">
                         <div th:each="g : ${generi}" class="col-6 col-md-3">
-                            <div class="form-check border p-1 rounded">
-                                <input class="form-check-input ms-1" type="checkbox" th:field="*{categorie}" th:value="${g}">
-                                <label class="form-check-label ms-1" th:text="${g}"></label>
+                            <div class="form-check p-2 border border-secondary rounded m-1">
+                                <input class="form-check-input ms-0" type="checkbox" th:field="*{categorie}" th:value="${g}">
+                                <label class="form-check-label ms-2" th:text="${g}"></label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-info btn-lg w-100 fw-bold mt-3">Salva</button>
+                <button type="submit" class="btn btn-info btn-lg w-100 fw-bold mt-3 text-white" 
+                        th:text="${canzone.codice == null || canzone.codice == ''} ? 'Aggiungi alla Collezione' : 'Salva Modifiche'"></button>
             </form>
         </div>
     </div>
