@@ -5,6 +5,7 @@
     <title>Music Catalog Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Definizione del tema grafico scuro con sfondo personalizzato */
         body { 
             background-color: #0b0e14; 
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Immagini/Srping.png'); 
@@ -13,68 +14,49 @@
             background-attachment: fixed; 
             min-height: 100vh; 
             color: white; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
         }
+        /* Card con effetto trasparenza (glassmorphism) */
         .glass-card { 
             background: rgba(0, 0, 0, 0.85); 
             backdrop-filter: blur(12px); 
             border-radius: 15px; 
             padding: 25px; 
             border: 1px solid rgba(0, 210, 255, 0.3); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
-        .table-custom th { 
-            color: #00d2ff !important; 
-            border-bottom: 2px solid rgba(0, 210, 255, 0.5) !important; 
-            background-color: rgba(0,0,0,0.3) !important; 
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-        .table-custom td { 
-            background-color: transparent !important; 
-            color: #e0e0e0 !important; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-            vertical-align: middle;
-        }
+        /* Personalizzazione testata e celle della tabella */
+        .table-custom th { color: #00d2ff !important; text-transform: uppercase; font-size: 0.85rem; }
+        .table-custom td { background-color: transparent !important; color: #e0e0e0 !important; vertical-align: middle; }
         .table-custom a { color: #00d2ff !important; text-decoration: none; font-weight: 600; }
-        .table-custom a:hover { text-decoration: underline; text-shadow: 0 0 5px #00d2ff; }
         
-        .btn-cyber-warning { background: rgba(255, 193, 7, 0.1); color: #ffc107 !important; border: 1px solid #ffc107; font-weight: bold; }
-        .btn-cyber-warning:hover { background: #ffc107; color: #000 !important; }
-        
-        .btn-cyber-danger { background: rgba(220, 53, 69, 0.1); color: #dc3545 !important; border: 1px solid #dc3545; font-weight: bold; }
-        .btn-cyber-danger:hover { background: #dc3545; color: #fff !important; }
-        
-        .badge-cat { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.5); padding: 5px 10px; }
-        .search-panel { background-color: rgba(0, 0, 0, 0.5) !important; border: 1px solid rgba(0, 210, 255, 0.2); }
+        /* Stili per i pulsanti personalizzati (Modifica ed Elimina) */
+        .btn-cyber-warning { background: rgba(255, 193, 7, 0.1); color: #ffc107 !important; border: 1px solid #ffc107; }
+        .btn-cyber-danger { background: rgba(220, 53, 69, 0.1); color: #dc3545 !important; border: 1px solid #dc3545; }
+        .badge-cat { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.5); }
     </style>
 </head>
 <body class="container mt-5">
     <div class="glass-card mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h2" style="color: #00d2ff; text-shadow: 0 0 8px rgba(0,210,255,0.4);">🎵 Catalogo Canzoni</h1>
-            <span class="text-muted small">Playlist Digitale</span>
-        </div>
+        <h1 class="h2 mb-4" style="color: #00d2ff;">🎵 Catalogo Canzoni</h1>
         
-        <form th:action="@{/}" method="get" class="row g-3 search-panel p-3 rounded-3">
+        <form th:action="@{/}" method="get" class="row g-3 p-3 rounded-3" style="background-color: rgba(0,0,0,0.5);">
             <div class="col-md-4">
                 <label class="form-label fw-bold small" style="color: #00d2ff;">Titolo o Autore</label>
-                <input type="text" name="search" class="form-control bg-dark text-white border-secondary shadow-none" th:value="${param.search}" placeholder="Cerca...">
+                <input type="text" name="search" class="form-control bg-dark text-white border-secondary" th:value="${param.search}" placeholder="Cerca...">
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-bold small" style="color: #00d2ff;">Anno</label>
-                <input type="number" name="anno" class="form-control bg-dark text-white border-secondary shadow-none" th:value="${param.anno}" placeholder="Es: 2024">
+                <input type="number" name="anno" class="form-control bg-dark text-white border-secondary" th:value="${param.anno}" placeholder="Es: 2024">
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-bold small" style="color: #00d2ff;">Genere</label>
-                <select name="genere" class="form-select bg-dark text-white border-secondary shadow-none">
+                <select name="genere" class="form-select bg-dark text-white border-secondary">
                     <option value="">Tutti i generi</option>
                     <option th:each="g : ${generi}" th:value="${g}" th:text="${g}" th:selected="${param.genere != null && param.genere[0] == g}"></option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-info w-100 fw-bold text-white shadow-sm" style="background: #00d2ff; border: none;">FILTRA</button>
+                <button type="submit" class="btn btn-info w-100 fw-bold text-white">FILTRA</button>
             </div>
         </form>
     </div>
@@ -93,7 +75,7 @@
                 </thead>
                 <tbody>
                     <tr th:if="${#lists.isEmpty(canzoni)}">
-                        <td colspan="5" class="text-center py-5 text-muted italic">Nessuna canzone trovata nel catalogo.</td>
+                        <td colspan="5" class="text-center py-5 text-muted">Nessuna canzone trovata nel catalogo.</td>
                     </tr>
                     <tr th:each="c : ${canzoni}">
                         <td><a th:href="@{/item/{id}(id=${c.codice})}" th:text="${c.titolo}"></a></td>
@@ -113,7 +95,7 @@
     </div>
 
     <div class="mt-4 d-flex justify-content-between pb-5">
-        <a th:href="@{/new}" class="btn btn-success fw-bold px-4 shadow-sm" style="background: #198754; border: none;">➕ AGGIUNGI TRACCIA</a>
+        <a th:href="@{/new}" class="btn btn-success fw-bold px-4">➕ AGGIUNGI TRACCIA</a>
         <a th:href="@{/clear}" class="btn btn-outline-danger btn-sm" onclick="return confirm('ATTENZIONE: Questa azione svuoterà l\'intero catalogo. Procedere?')">SVUOTA CATALOGO</a>
     </div>
 </body>

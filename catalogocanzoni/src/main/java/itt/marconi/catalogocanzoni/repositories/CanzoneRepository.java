@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface CanzoneRepository extends JpaRepository<Canzone, String> {
 
+    // Query personalizzata per filtrare i dati in base a testo, anno e genere
     @Query("SELECT c FROM Canzone c WHERE " +
            "(:testo IS NULL OR LOWER(c.titolo) LIKE LOWER(CONCAT('%', :testo, '%')) " +
            "OR LOWER(c.autore) LIKE LOWER(CONCAT('%', :testo, '%'))) AND " +
